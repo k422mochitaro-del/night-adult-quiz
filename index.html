@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜の大人診断 - ホーム</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: linear-gradient(135deg, #0d0d0d, #2c0a0a);
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+h1 {
+  font-family: 'Oswald', sans-serif;
+  color: #d32f2f;
+  font-size: 36px;
+  margin-top: 60px;
+  z-index: 2;
+  position: relative;
+}
+p {
+  font-size: 18px;
+  margin: 20px auto;
+  max-width: 400px;
+  line-height: 1.5;
+  z-index: 2;
+  position: relative;
+}
+button {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 16px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 2;
+  position: relative;
+}
+button:hover {
+  background: linear-gradient(45deg, #b71c1c, #f44336);
+  transform: translateY(-2px);
+}
+
+/* 背景キャラクター */
+.bg-character {
+  position: absolute;
+  width: 150px;
+  opacity: 0.05;
+  animation: float 20s linear infinite;
+}
+
+.bg-character:nth-child(1){ top:10%; left:5%; }
+.bg-character:nth-child(2){ top:30%; left:20%; }
+.bg-character:nth-child(3){ top:60%; left:10%; }
+.bg-character:nth-child(4){ top:50%; left:70%; }
+.bg-character:nth-child(5){ top:20%; left:80%; }
+.bg-character:nth-child(6){ top:75%; left:60%; }
+.bg-character:nth-child(7){ top:85%; left:30%; }
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(15deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- 背景キャラクター -->
+<img src="images/D-F-O-A.jpg" class="bg-character" alt="">
+<img src="images/S-F-O-N.jpg" class="bg-character" alt="">
+<img src="images/D-E-O-A.jpg" class="bg-character" alt="">
+<img src="images/S-E-C-N.jpg" class="bg-character" alt="">
+<img src="images/D-F-C-N.jpg" class="bg-character" alt="">
+<img src="images/S-F-C-A.jpg" class="bg-character" alt="">
+<img src="images/D-E-C-N.jpg" class="bg-character" alt="">
+
+<h1>夜の大人診断</h1>
+<p>あなたの「夜の大人度」を診断して、16タイプのキャラクターに分類します。<br>自分の性格や好みを探るちょっと刺激的な診断です。</p>
+<button onclick="location.href='quiz.html'">診断をスタート</button>
+
+</body>
+</html>
