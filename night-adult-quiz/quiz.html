@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜の大人診断</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: linear-gradient(135deg, #0d0d0d, #2c0a0a);
+  color: #fff;
+  margin: 0;
+  padding: 15px;
+}
+h1 {
+  font-family: 'Oswald', sans-serif;
+  color: #d32f2f;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+#quiz {
+  max-width: 480px;
+  margin: 0 auto;
+}
+.question {
+  background: rgba(255,255,255,0.05);
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  transition: transform 0.3s;
+}
+button {
+  margin: 8px 5px 0 0;
+  padding: 14px 0;
+  width: 48%;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s;
+}
+button:hover {
+  background: linear-gradient(45deg, #b71c1c, #f44336);
+  transform: translateY(-2px);
+}
+.result {
+  display: none;
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.85);
+  text-align: center;
+  box-shadow: 0 0 25px #d32f2f;
+}
+.result h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  color: #f44336;
+  margin-bottom: 10px;
+}
+.result h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+.result img {
+  width: 250px;      /* 幅を大きく */
+  height: auto;      /* 高さ自動で縦横比維持 */
+  margin-bottom: 15px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 0 25px #d32f2f;  /* 少し影を大きく */
+}
+.progress-bar {
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.progress-bar-inner {
+  height: 6px;
+  width: 0%;
+  background: #d32f2f;
+  transition: width 0.3s;
+}
+@media (max-width: 400px) {
+  .question { font-size: 16px; padding: 15px; }
+  button { font-size: 14px; padding: 12px 0; width: 100%; margin-bottom: 10px; }
+  .result img { width: 180px; height: auto; }
+}
+</style>
+</head>
+<body>
+
+<h1>夜の大人診断</h1>
+
+<div id="quiz">
+  <div class="progress-bar"><div class="progress-bar-inner" id="progress"></div></div>
+  <div id="question-container"></div>
+</div>
+
+<div id="result" class="result">
+  <h2 id="result-code"></h2>
+  <h3 id="result-name"></h3>
+  <p id="result-desc"></p>
+  <img id="result-img" alt="">
+  <br>
+  <a id="share-twitter" target="_blank">Twitterでシェアする</a>
+</div>
+
+<script>
+// ----------------質問リスト----------------
+const questions = [
+  { text: "夜は自分でリードしたい派ですか？", direction:"D", axis:"DS", options: ["絶対にリードしたくない","リードしたくない","そこまでリードしたくない","少しはリードしたい","リードしたい","絶対にリードしたい"] },
+  { text: "相手に指示されるより、自分の好みを伝えたいですか？", direction:"D", axis:"DS", options: ["絶対に伝えたくない","伝えたくない","聞かれたら伝えても良い","少しは伝えたい","伝えたい","絶対に伝えたい"] },
+  { text: "快楽を最優先に行動しますか？", direction:"F", axis:"FE", options: ["絶対に優先したくない","優先したくない","ちょっとなら優先しても良い","少しは優先したい","優先したい","絶対に優先したい"] },
+  { text: "心のつながりを感じられると興奮しますか？", direction:"E", axis:"FE", options: ["全く興奮しない","興奮しない","あんまり興奮しない","少し興奮する","結構興奮する","めっちゃ興奮する"] },
+  { text: "性的欲望は隠さずオープンに表現しますか？", direction:"O", axis:"OC", options: ["絶対に隠す","隠す","できるだけ隠す","少しは表現する","表現する","めっちゃ表現する"] },
+  { text: "関係が浅くても性の本性を見せられますか？", direction:"O", axis:"OC", options: ["絶対に見せたくない","見せたくない","できるだけ見せたくない","少しは見せたい","見せたい","めっちゃ見せたい"] },
+  { text: "新しいプレイやシチュエーションに挑戦するのが好きですか？", direction:"A", axis:"AN", options: ["絶対に挑戦したくない","挑戦したくない","できるだけ挑戦したくない","少しは挑戦したい","挑戦したい","めっちゃ挑戦したい"] },
+  { text: "安定したルーティン的なプレイが心地よいですか？", direction:"N", axis:"AN", options: ["全く物足りない","物足りない","少し物足りない","少しは心地よい","心地よい","めっちゃ心地よい"] },
+  { text: "プレイ中、相手の感情や反応を気にしますか？", direction:"S", axis:"DS", options: ["全く気にしない","あまり気にしない","ちょっとは気にする","少し気にする","普通に気にする","めっちゃ気にする"] },
+  { text: "感情の高まりに身を任せることはありますか？", direction:"F", axis:"FE", options: ["全くない","ほぼない","あまりない","ややある","結構ある","めっちゃある"] },
+  { text: "遊びや実験的プレイに抵抗はありますか？", direction:"C", axis:"OC", options: ["逆に不可欠","全く抵抗ない","抵抗ない","少しは抵抗ある","抵抗ある","めっちゃ抵抗ある"] },
+  { text: "プレイ中に新しいことに挑戦するのはワクワクしますか？", direction:"A", axis:"AN", options: ["全くワクワクしない","ワクワクしない","そんなにワクワクしない","少しワクワクする","ワクワクする","めっちゃワクワクする"] },
+  { text: "安定感のある従順なプレイを好みますか？", direction:"N", axis:"AN", options: ["全く好まない","好まない","あまり好まない","嫌ではない","好む","めっちゃ好む"] },
+  { text: "相手の気持ちを優先しすぎて自分の快楽は後回しになることがありますか？", direction:"E", axis:"FE", options: ["全くない","ない","あまりない","たまにある","ある","めっちゃある"] },
+  { text: "性的な楽しみを遠慮なく受け止められますか？", direction:"O", axis:"OC", options: ["全く受け止められない","受け止められない","あまり受け止められない","少しは受け止められる","受け止められる","めっちゃ受け止められる"] },
+  { text: "好奇心旺盛で性欲に従順な方ですか？", direction:"A", axis:"AN", options: ["全く従順でない","従順ではない","あまり従順ではない","少しは従順","従順","めっちゃ従順"] },
+  { text: "秘密の関係が好きですか？", direction:"O", axis:"OC", options: ["全く好きでない","好きではない","あまり好きではない","少しは好き","好き","めっちゃ好き"] },
+  { text: "安定感・安心感を重視しますか？", direction:"N", axis:"AN", options: ["全く重視しない","重視しない","あまり重視しない","やや重視する","重視する","めっちゃ重視する"] },
+  { text: "恋愛や愛情表現が重要ですか？", direction:"E", axis:"FE", options: ["全く重要でない","重要ではない","あまり重要ではない","やや重要","重要","めっちゃ重要"] },
+  { text: "究極の尽くし系ですか？", direction:"N", axis:"AN", options: ["全く尽くさない","尽くさない","あまり尽くさない","やや尽くす","尽くす","めっちゃ尽くす"] },
+];
+
+// ----------------タイプ説明文----------------
+const types = {
+  "D-F-O-A": { name:"絶対主導権握りたい肉体モンスター", desc:"本能のまま主導権を握り、肉体的な刺激を追い求める情熱的なタイプ。" },
+  "D-F-O-N": { name:"理性ぶったセックス中毒者", desc:"頭では理性を保っているつもりでも、実は快楽に抗えない隠れ中毒者。" },
+  "D-F-C-A": { name:"ドSな快楽マッドサイエンティスト", desc:"相手を実験台にするかのように、快楽の可能性を探求するドS研究者タイプ。" },
+  "D-F-C-N": { name:"肉体信仰の支配リーダー", desc:"愛よりも肉体的な快感を重視し、主導権を握りたい強い支配欲を持つリーダー気質。" },
+  "D-E-O-A": { name:"愛を説く支配系ロマンチスト", desc:"支配欲と同時に愛を語り、ロマンチックに相手を導くタイプ。" },
+  "D-E-O-N": { name:"甘やかしドSカリスマ", desc:"相手を支配しつつも、時には甘やかす。Sっ気と包容力を兼ね備えたカリスマ的存在。" },
+  "D-E-C-A": { name:"幻想的SM詩人", desc:"愛や感情を幻想的に表現しながら、SM的要素も楽しむ芸術家気質のロマンチスト。" },
+  "D-E-C-N": { name:"重たい愛の支配者", desc:"愛情が深すぎて、時に相手を縛りつけるほどの重たい支配力を発揮するタイプ。" },
+  "S-F-O-A": { name:"快楽を追い求める猿系モンスター", desc:"ひたすら快楽に忠実で、飽くなき欲求を追い続けるエネルギッシュなタイプ。" },
+  "S-F-O-N": { name:"セクシャル従順ペット", desc:"子犬のように従順で、相手の望みを叶えることに喜びを感じる可愛らしいタイプ。" },
+  "S-F-C-A": { name:"隠れ変態チャレンジャー", desc:"一見大人しそうに見えて、実は新しい快楽への挑戦に積極的な隠れ変態タイプ。" },
+  "S-F-C-N": { name:"おとなしい肉体奉仕者", desc:"大人しく従順で、相手を満足させることを自らの喜びとする献身的なタイプ。" },
+  "S-E-O-A": { name:"恋愛依存のセックスロマンチスト", desc:"恋愛感情と快感を強く結びつけ、愛を求め続けるロマンチックな情熱家。" },
+  "S-E-O-N": { name:"純愛に溺れるベッドの仔犬", desc:"愛情に包まれることを何よりも大切にし、相手に尽くす純粋な仔犬タイプ。" },
+  "S-E-C-A": { name:"秘密主義の危険な夢想家", desc:"秘密を抱えつつ、危うい魅力を放つ幻想的な夢想家。" },
+  "S-E-C-N": { name:"究極の尽くし系セックス聖人", desc:"愛情深く、相手の欲望をひたすら受け止める究極の献身タイプ。" },
+};
+
+// ----------------変数----------------
+let current = 0;
+let answers = [];
+const axisDirectionMap = { DS: 'D', FE: 'F', OC: 'O', AN: 'A' };
+
+// ----------------関数----------------
+function showQuestion() {
+  if(current >= questions.length) {
+    showResult();
+    return;
+  }
+  const q = questions[current];
+  const questionContainer = document.getElementById("question-container");
+  questionContainer.innerHTML = `
+    <div class="question"><strong>Q${current+1}:</strong> ${q.text}</div>
+    ${q.options.map((opt,i)=>`<button onclick="selectAnswer('${q.axis}',${i+1},'${q.direction}')">${opt}</button>`).join("<br>")}
+  `;
+
+  // プログレスバー更新
+  const progress = document.getElementById("progress");
+  progress.style.width = `${(current / questions.length) * 100}%`;
+}
+
+function selectAnswer(axis, value, direction) {
+  const score = (direction === axisDirectionMap[axis]) ? value - 3.5 : 3.5 - value;
+  answers.push({axis, score});
+  current++;
+  showQuestion();
+}
+
+function showResult() {
+  document.getElementById("quiz").style.display = "none"; // クイズ非表示
+  const axes = {DS:0, FE:0, OC:0, AN:0};
+  answers.forEach(a => axes[a.axis] += a.score);
+
+  const code =
+    (axes.DS >= 0 ? "D" : "S") + "-" +
+    (axes.FE >= 0 ? "F" : "E") + "-" +
+    (axes.OC >= 0 ? "O" : "C") + "-" +
+    (axes.AN >= 0 ? "A" : "N");
+
+  const type = types[code] || types["S-F-O-A"];
+  const resultDiv = document.getElementById("result");
+  resultDiv.style.display = "block"; // 結果表示
+
+  document.getElementById("result-code").textContent = `あなたのタイプは ${code}`;
+  document.getElementById("result-name").textContent = type.name;
+  document.getElementById("result-desc").textContent = type.desc;
+  document.getElementById("result-img").src = `images/${code}.jpg`;
+  document.getElementById("result-img").alt = type.name;
+
+  // Twitterシェアリンク設定
+  setShareLinks(`${type.name} (${code})`);
+}
+
+function setShareLinks(resultName) {
+  const url = encodeURIComponent(location.href);
+  const text = encodeURIComponent(`診断したら私は『${resultName}』タイプでした！ #大人診断`);
+  document.getElementById("share-twitter").href =
+    `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+}
+
+// 初期表示
+showQuestion();
+</script>
+
+</body>
+</html>
