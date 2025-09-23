@@ -60,29 +60,29 @@ button:hover {
 
 /* モーダル */
 #detail-modal {
-  display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background: rgba(0,0,0,0.8);
+  display: block;  /* flex をやめる */
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
   z-index: 9999;
   overflow-y: auto;
 }
 
 #detail-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* ← これで必ずど真ん中 */
   background: #222;
   padding: 20px;
   border-radius: 15px;
   max-width: 400px;
-  width: 100%;
-  text-align: center;
+  width: 90%; /* ← スマホでは画面幅の90%にすると自然 */
   box-sizing: border-box;
-
-  margin: auto; /* これを追加すると上下中央揃えが安定する */
+  text-align: center;
 }
+
 
 #detail-content img { width:100%; border-radius:10px; }
 #detail-content h3 { margin-top:10px; }
