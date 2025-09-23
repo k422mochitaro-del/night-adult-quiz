@@ -61,15 +61,15 @@ button:hover {
 /* モーダル */
 #detail-modal {
   display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0,0,0,0.8);
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  justify-content: center;
-  align-items: center;
   z-index: 9999;
-  overflow-y: auto; /* 画面を超える場合にスクロール可能に */
-  padding: 20px;    /* 上下に余白を作る */
+  overflow-y: auto;
 }
 
 #detail-content {
@@ -80,6 +80,8 @@ button:hover {
   width: 100%;
   text-align: center;
   box-sizing: border-box;
+
+  margin: auto; /* これを追加すると上下中央揃えが安定する */
 }
 
 #detail-content img { width:100%; border-radius:10px; }
