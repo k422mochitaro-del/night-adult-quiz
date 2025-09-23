@@ -87,6 +87,36 @@ button:hover {
   object-fit: cover;
   box-shadow: 0 0 25px #d32f2f;  /* 少し影を大きく */
 }
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.share-btn .icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  filter: invert(100%);
+}
+
+.share-btn.twitter { background: #1da1f2; }
+.share-btn.twitter:hover { background: #0d95e8; }
+
+.share-btn.line { background: #00c300; }
+.share-btn.line:hover { background: #00a500; }
+
+.share-btn.facebook { background: #1877f2; }
+.share-btn.facebook:hover { background: #0f62e0; }
+
 .progress-bar {
   height: 6px;
   background: #333;
@@ -122,7 +152,18 @@ button:hover {
   <p id="result-desc"></p>
   <img id="result-img" alt="">
   <br>
-  <a id="share-twitter" target="_blank">Twitterでシェアする</a>
+</div>
+
+<div id="share-buttons" style="margin-top:15px; text-align:center; display:none;">
+  <a id="share-twitter-btn" target="_blank" class="share-btn twitter">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" class="icon"> Twitter
+  </a>
+  <a id="share-line-btn" target="_blank" class="share-btn line">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/line.svg" alt="LINE" class="icon"> LINE
+  </a>
+  <a id="share-facebook-btn" target="_blank" class="share-btn facebook">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" class="icon"> Facebook
+  </a>
 </div>
 
 <div class="result-buttons" style="margin-top:30px;">
@@ -229,15 +270,46 @@ function showResult() {
   document.getElementById("result-img").src = `images/${code}.jpg`;
   document.getElementById("result-img").alt = type.name;
 
-  // Twitterシェアリンク設定
-  setShareLinks(`${type.name} (${code})`);
 }
 
+function showResult() {
+  document.getElementById("quiz").style.display = "none"; // クイズ非表示
+  const axes = {DS:0, FE:0, OC:0, AN:0};
+  answers.forEach(a => axes[a.axis] += a.score);
+
+  const code =
+    (axes.DS >= 0 ? "D" : "S") + "-" +
+    (axes.FE >= 0 ? "F" : "E") + "-" +
+    (axes.OC >= 0 ? "O" : "C") + "-" +
+    (axes.AN >= 0 ? "A" : "N");
+
+  const type = types[code] || types["S-F-O-A"];
+  const resultDiv = document.getElementById("result");
+  resultDiv.style.display = "block"; // 結果表示
+
+  document.getElementById("result-code").textContent = `あなたのタイプは ${code}`;
+  document.getElementById("result-name").textContent = type.name;
+  document.getElementById("result-desc").textContent = type.desc;
+  document.getElementById("result-img").src = `images/${code}.jpg`;
+  document.getElementById("result-img").alt = type.name;
+
+  // SNSシェアボタンを表示
+  const shareButtons = document.getElementById("share-buttons");
+  shareButtons.style.display = "block";
+
+  // SNSリンク設定
+  setShareLinks(`${type.name} (${code})`);
+}
 function setShareLinks(resultName) {
   const url = encodeURIComponent(location.href);
   const text = encodeURIComponent(`診断したら私は『${resultName}』タイプでした！ #大人診断`);
-  document.getElementById("share-twitter").href =
+
+  document.getElementById("share-twitter-btn").href =
     `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+  document.getElementById("share-line-btn").href =
+    `https://social-plugins.line.me/lineit/share?url=${url}`;
+  document.getElementById("share-facebook-btn").href =
+    `https://www.facebook.com/sharer/sharer.php?u=${url}`;
 }
 
 // 初期表示
