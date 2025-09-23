@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>16タイプ紹介ページ</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: linear-gradient(135deg, #0d0d0d, #2c0a0a);
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+h1,h2,h3 { font-family: 'Oswald', sans-serif; }
+h2 { color:#d32f2f; font-size:32px; margin-top:40px; }
+p { line-height:1.6; max-width:600px; margin:10px auto; }
+
+.type-grid {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+  margin-top:30px;
+}
+
+.type-card {
+  background: rgba(255,255,255,0.05);
+  border:1px solid #fff;
+  border-radius:15px;
+  width:150px;
+  cursor:pointer;
+  transition:0.3s;
+  text-align:center;
+  padding:10px;
+}
+.type-card:hover { transform: translateY(-5px); }
+
+.type-card img { width:100%; border-radius:10px; }
+
+button {
+  font-family:'Noto Sans JP', sans-serif;
+  background:#d32f2f;
+  color:#fff;
+  border:none;
+  padding:16px 40px;
+  font-size:18px;
+  font-weight:bold;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover {
+  background: linear-gradient(45deg,#b71c1c,#f44336);
+  transform:translateY(-2px);
+}
+
+/* モーダル */
+#detail-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow-y: auto; /* 画面を超える場合にスクロール可能に */
+  padding: 20px;    /* 上下に余白を作る */
+}
+
+#detail-content {
+  background: #222;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#detail-content img { width:100%; border-radius:10px; }
+#detail-content h3 { margin-top:10px; }
+#detail-content p { margin:10px 0; }
+#detail-content .close-btn {
+  margin-top:15px;
+  background:#b71c1c;
+  padding:10px 20px;
+  border-radius:8px;
+}
+#detail-content .close-btn:hover { background:#f44336; }
+
+/* 丸型相性画像 */
+.compatible-row {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  margin-top:10px;
+}
+
+.compatible-wrapper {
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  overflow:hidden;
+  border:1px solid #fff;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.compatible-wrapper img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.home-button { margin:30px; }
+</style>
+</head>
+<body>
+
+<h1>16タイプ紹介</h1>
+
+<section id="type-explanation" style="padding:50px 20px;">
+  <h2>4つの軸の説明</h2>
+  <h3>D/S軸（リード軸）</h3>
+  <p>
+      <strong>D (Dominant)</strong>：主導権を握るタイプ。恋愛や関係においてリードしたい、決定権を持ちたい人。積極的で自分の意思をはっきり示す傾向があります。<br>
+      <strong>S (Submissive)</strong>：委ねるタイプ。相手に身を任せることで安心感を得る人。従順で控えめですが、信頼できる相手には深い愛情を示します。
+    </p>
+
+    <h3>F/E軸（感情軸）</h3>
+    <p>
+      <strong>F (Physical)</strong>：肉体的な快楽や感覚的な刺激を重視。触れ合いや身体的な楽しみから喜びや満足感を得やすいタイプです。<br>
+      <strong>E (Emotional)</strong>：精神的なつながりを重視。心の交流や感情的な絆を重視し、恋愛や関係においては愛情や信頼を第一に考えます。
+    </p>
+
+    <h3>O/C軸（開放軸）</h3>
+    <p>
+      <strong>O (Open)</strong>：性や感情表現をオープンに示すタイプ。好奇心旺盛で、楽しさや快楽を隠さず表現します。<br>
+      <strong>C (Closed)</strong>：心を許した相手にだけ自分を見せるタイプ。慎重で控えめ、信頼できる関係で深くつながることを好みます。
+    </p>
+
+    <h3>A/N軸（刺激軸）</h3>
+    <p>
+      <strong>A (Adventurous)</strong>：新しい刺激や変化を求めるタイプ。挑戦や冒険を楽しみ、恋愛や快楽においても好奇心が旺盛です。<br>
+      <strong>N (Normal)</strong>：安定や安心を求めるタイプ。変化よりも落ち着いた関係や安全な環境を好み、安心感を重視します。
+    </p>
+</section>
+
+<section id="type-cards">
+  <h2>16タイプキャラ一覧</h2>
+  <div class="type-grid" id="grid"></div>
+</section>
+
+<div class="home-button">
+  <button onclick="location.href='index.html'">ホームへ戻る</button>
+</div>
+
+<!-- モーダル -->
+<div id="detail-modal">
+  <div id="detail-content">
+    <img id="detail-img" src="" alt="">
+    <h3 id="detail-name"></h3>
+    <p id="detail-desc"></p>
+    <div id="detail-best"><strong>ベスト相性:</strong></div>
+    <div id="detail-worst"><strong>ワースト相性:</strong></div>
+    <button class="close-btn" onclick="closeDetail()">閉じる</button>
+  </div>
+</div>
+
+<script>
+// タイプ情報（jpg画像を使用）
+const typeData = {
+  "D-F-O-A": {name:"絶対主導権握りたい肉体モンスター", animal:"ライオン", img:"images/D-F-O-A.jpg", desc:"本能のまま主導権を握り、肉体的な刺激を追い求める情熱的なタイプ。相手を圧倒するカリスマを持ちます。", best:["S-F-O-A","S-F-O-N","S-E-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "D-F-O-N": {name:"理性ぶったセックス中毒者", animal:"トラ", img:"images/D-F-O-N.jpg", desc:"頭では理性を保っているつもりでも、実は快楽に抗えない隠れ中毒者。理性と欲望の狭間で揺れ動きます。", best:["S-F-O-N","S-E-O-A","S-F-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "D-F-C-A": {name:"ドSな快楽マッドサイエンティスト", animal:"タカ", img:"images/D-F-C-A.jpg", desc:"相手を実験台にするかのように、快楽の可能性を探求するドS研究者タイプ。常に新しい刺激を求めます。", best:["S-F-C-A","S-F-C-N","S-E-C-A"], worst:["D-F-O-N","D-E-O-N","S-E-O-N"]},
+  "D-F-C-N": {name:"肉体信仰の支配リーダー", animal:"オオカミ", img:"images/D-F-C-N.jpg", desc:"愛よりも肉体的な快感を重視し、主導権を握りたい強い支配欲を持つリーダー気質。", best:["S-F-C-N","S-E-C-N","S-F-C-A"], worst:["D-F-O-A","D-E-O-A","S-E-O-A"]},
+  "D-E-O-A": {name:"愛を説く支配系ロマンチスト", animal:"ユニコーン", img:"images/D-E-O-A.jpg", desc:"支配欲と同時に愛を語り、ロマンチックに相手を導くタイプ。情熱と優しさの二面性を持ちます。", best:["S-E-O-A","S-E-O-N","S-F-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "D-E-O-N": {name:"甘やかしドSカリスマ", animal:"キツネ", img:"images/D-E-O-N.jpg", desc:"相手を支配しつつも、時には甘やかす。Sっ気と包容力を兼ね備えたカリスマ的存在です。", best:["S-E-O-N","S-F-O-N","S-E-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "D-E-C-A": {name:"幻想的SM詩人", animal:"フクロウ", img:"images/D-E-C-A.jpg", desc:"愛や感情を幻想的に表現しながら、SM的要素も楽しむ芸術家気質のロマンチスト。", best:["S-E-C-A","S-F-C-A","S-F-C-N"], worst:["D-E-O-N","D-F-O-N","S-E-O-N"]},
+  "D-E-C-N": {name:"重たい愛の支配者", animal:"クマ", img:"images/D-E-C-N.jpg", desc:"愛情が深すぎて、時に相手を縛りつけるほどの重たい支配力を発揮するタイプ。", best:["S-E-C-N","S-F-C-N","S-F-C-A"], worst:["D-E-O-A","D-F-O-A","S-E-O-A"]},
+  "S-F-O-A": {name:"快楽を追い求める猿系モンスター", animal:"サル", img:"images/S-F-O-A.jpg", desc:"ひたすら快楽に忠実で、飽くなき欲求を追い続けるエネルギッシュなタイプ。", best:["D-F-O-A","D-F-O-N","S-E-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "S-F-O-N": {name:"セクシャル従順ペット", animal:"ネコ", img:"images/S-F-O-N.jpg", desc:"子猫のように従順で、相手の望みを叶えることに喜びを感じる可愛らしいタイプ。", best:["D-F-O-N","S-E-O-N","S-F-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "S-F-C-A": {name:"隠れ変態チャレンジャー", animal:"カメレオン", img:"images/S-F-C-A.jpg", desc:"一見大人しそうに見えて、実は新しい快楽への挑戦に積極的な隠れ変態タイプ。", best:["D-F-C-A","S-F-C-N","S-E-C-A"], worst:["D-F-O-N","D-E-O-N","S-E-O-N"]},
+  "S-F-C-N": {name:"おとなしい肉体奉仕者", animal:"ウサギ", img:"images/S-F-C-N.jpg", desc:"大人しく従順で、相手を満足させることを自らの喜びとする献身的なタイプ。", best:["D-F-C-N","S-F-C-A","S-E-C-N"], worst:["D-F-O-A","D-E-O-A","S-E-O-A"]},
+  "S-E-O-A": {name:"恋愛依存のセックスロマンチスト", animal:"ハト", img:"images/S-E-O-A.jpg", desc:"恋愛感情と快感を強く結びつけ、愛を求め続けるロマンチックな情熱家。", best:["D-E-O-A","S-F-O-A","S-E-O-N"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "S-E-O-N": {name:"純愛に溺れるベッドの仔犬", animal:"イヌ", img:"images/S-E-O-N.jpg", desc:"愛情に包まれることを何よりも大切にし、相手に尽くす純粋な仔犬タイプ。", best:["D-E-O-N","S-F-O-N","S-E-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "S-E-C-A": {name:"秘密主義の危険な夢想家", animal:"コウモリ", img:"images/S-E-C-A.jpg", desc:"秘密を抱えつつ、危うい魅力を放つ幻想的な夢想家。ミステリアスな一面が特徴です。", best:["D-E-C-A","S-F-C-A","S-F-C-N"], worst:["D-E-O-N","D-F-O-N","S-E-O-N"]},
+  "S-E-C-N": {name:"究極の尽くし系セックス聖人", animal:"シカ", img:"images/S-E-C-N.jpg", desc:"愛情深く、相手の欲望をひたすら受け止める究極の献身タイプ。", best:["D-E-C-N","S-F-C-N","S-F-C-A"], worst:["D-E-O-A","D-F-O-A","S-E-O-A"]}
+};
+
+// カード生成
+const grid = document.getElementById('grid');
+for(let code in typeData){
+  const card = document.createElement('div');
+  card.className='type-card';
+  card.innerHTML = `
+    <img src="${typeData[code].img}" alt="${code}">
+    <h4>${code} - ${typeData[code].animal}</h4>
+    <p>${typeData[code].name}</p>
+  `;
+  card.onclick = ()=>openDetail(code);
+  grid.appendChild(card);
+}
+
+// モーダル表示
+function openDetail(code){
+  const data = typeData[code];
+  document.getElementById('detail-modal').style.display='flex';
+  document.getElementById('detail-img').src = data.img;
+  document.getElementById('detail-name').textContent = `${code} - ${data.animal}`;
+  document.getElementById('detail-desc').textContent = data.desc;
+
+  // ベスト相性
+  const bestDiv = document.getElementById('detail-best');
+  bestDiv.innerHTML = "<strong>ベスト相性:</strong> ";
+  const bestRow = document.createElement('div');
+  bestRow.className = 'compatible-row';
+  data.best.forEach(b=>{
+    const wrapper = document.createElement('div');
+    wrapper.className = 'compatible-wrapper';
+    wrapper.title = b;
+    wrapper.onclick = ()=>openDetail(b);
+
+    const img = document.createElement('img');
+    img.src = typeData[b].img;
+
+    wrapper.appendChild(img);
+    bestRow.appendChild(wrapper);
+  });
+  bestDiv.appendChild(bestRow);
+
+  // ワースト相性
+  const worstDiv = document.getElementById('detail-worst');
+  worstDiv.innerHTML = "<strong>ワースト相性:</strong> ";
+  const worstRow = document.createElement('div');
+  worstRow.className = 'compatible-row';
+  data.worst.forEach(w=>{
+    const wrapper = document.createElement('div');
+    wrapper.className = 'compatible-wrapper';
+    wrapper.title = w;
+    wrapper.onclick = ()=>openDetail(w);
+
+    const img = document.createElement('img');
+    img.src = typeData[w].img;
+
+    wrapper.appendChild(img);
+    worstRow.appendChild(wrapper);
+  });
+  worstDiv.appendChild(worstRow);
+}
+
+function closeDetail(){
+  document.getElementById('detail-modal').style.display='none';
+}
+</script>
+
+</body>
+</html>

@@ -32,6 +32,15 @@ h1 {
   margin-bottom: 20px;
   font-size: 18px;
   transition: transform 0.3s;
+}  
+  .options {
+  text-align: center;      /* ボタンを中央寄せ */
+}
+
+.options button {
+  display: block;          /* 1つずつ縦に並べる場合 */
+  width: 80%;              /* ボタンの幅を揃える */
+  margin: 10px auto;       /* 中央寄せ */
 }
 button {
   margin: 8px 5px 0 0;
@@ -148,11 +157,11 @@ const questions = [
 
 // ----------------タイプ説明文----------------
 const types = {
-  "D-F-O-A": { name:"絶対主導権握りたい肉体モンスター", desc:"本能のまま主導権を握り、肉体的な刺激を追い求める情熱的なタイプ。" },
-  "D-F-O-N": { name:"理性ぶったセックス中毒者", desc:"頭では理性を保っているつもりでも、実は快楽に抗えない隠れ中毒者。" },
-  "D-F-C-A": { name:"ドSな快楽マッドサイエンティスト", desc:"相手を実験台にするかのように、快楽の可能性を探求するドS研究者タイプ。" },
+  "D-F-O-A": { name:"絶対主導権握りたい肉体モンスター", desc:"本能のまま主導権を握り、肉体的な刺激を追い求める情熱的なタイプ。相手を圧倒するカリスマを持ちます。" },
+  "D-F-O-N": { name:"理性ぶったセックス中毒者", desc:"頭では理性を保っているつもりでも、実は快楽に抗えない隠れ中毒者。理性と欲望の狭間で揺れ動きます。" },
+  "D-F-C-A": { name:"ドSな快楽マッドサイエンティスト", desc:"相手を実験台にするかのように、快楽の可能性を探求するドS研究者タイプ。常に新しい刺激を求めます。" },
   "D-F-C-N": { name:"肉体信仰の支配リーダー", desc:"愛よりも肉体的な快感を重視し、主導権を握りたい強い支配欲を持つリーダー気質。" },
-  "D-E-O-A": { name:"愛を説く支配系ロマンチスト", desc:"支配欲と同時に愛を語り、ロマンチックに相手を導くタイプ。" },
+  "D-E-O-A": { name:"愛を説く支配系ロマンチスト", desc:"支配欲と同時に愛を語り、ロマンチックに相手を導くタイプ。情熱と優しさの二面性を持ちます。" },
   "D-E-O-N": { name:"甘やかしドSカリスマ", desc:"相手を支配しつつも、時には甘やかす。Sっ気と包容力を兼ね備えたカリスマ的存在。" },
   "D-E-C-A": { name:"幻想的SM詩人", desc:"愛や感情を幻想的に表現しながら、SM的要素も楽しむ芸術家気質のロマンチスト。" },
   "D-E-C-N": { name:"重たい愛の支配者", desc:"愛情が深すぎて、時に相手を縛りつけるほどの重たい支配力を発揮するタイプ。" },
@@ -162,7 +171,7 @@ const types = {
   "S-F-C-N": { name:"おとなしい肉体奉仕者", desc:"大人しく従順で、相手を満足させることを自らの喜びとする献身的なタイプ。" },
   "S-E-O-A": { name:"恋愛依存のセックスロマンチスト", desc:"恋愛感情と快感を強く結びつけ、愛を求め続けるロマンチックな情熱家。" },
   "S-E-O-N": { name:"純愛に溺れるベッドの仔犬", desc:"愛情に包まれることを何よりも大切にし、相手に尽くす純粋な仔犬タイプ。" },
-  "S-E-C-A": { name:"秘密主義の危険な夢想家", desc:"秘密を抱えつつ、危うい魅力を放つ幻想的な夢想家。" },
+  "S-E-C-A": { name:"秘密主義の危険な夢想家", desc:"秘密を抱えつつ、危うい魅力を放つ幻想的な夢想家。ミステリアスな一面が特徴です。" },
   "S-E-C-N": { name:"究極の尽くし系セックス聖人", desc:"愛情深く、相手の欲望をひたすら受け止める究極の献身タイプ。" },
 };
 
@@ -179,10 +188,13 @@ function showQuestion() {
   }
   const q = questions[current];
   const questionContainer = document.getElementById("question-container");
-  questionContainer.innerHTML = `
-    <div class="question"><strong>Q${current+1}:</strong> ${q.text}</div>
-    ${q.options.map((opt,i)=>`<button onclick="selectAnswer('${q.axis}',${i+1},'${q.direction}')">${opt}</button>`).join("<br>")}
-  `;
+ questionContainer.innerHTML = `
+  <div class="question"><strong>Q${current+1}:</strong> ${q.text}</div>
+  <div class="options">
+    ${q.options.map((opt,i)=>`<button onclick="selectAnswer('${q.axis}',${i+1},'${q.direction}')">${opt}</button>`).join("")}
+  </div>
+`;
+
 
   // プログレスバー更新
   const progress = document.getElementById("progress");
