@@ -118,18 +118,37 @@ button:hover {
 .share-btn.facebook:hover { background: #0f62e0; }
 
 .progress-bar {
+  position: relative;  /* ここが重要 */
   height: 6px;
   background: #333;
   border-radius: 3px;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 18px;
 }
+
 .progress-bar-inner {
   height: 6px;
   width: 0%;
   background: #d32f2f;
   transition: width 0.3s;
 }
+
+.progress-percent {
+  position: absolute;
+  top: -20px;
+  left: 0; /* 初期値を0に */
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.question.finished {
+  text-align: center;
+  font-size: 20px; /* お好みで */
+  font-weight: bold;
+}
+
 @media (max-width: 400px) {
   .question { font-size: 16px; padding: 15px; }
   button { font-size: 14px; padding: 12px 0; width: 100%; margin-bottom: 10px; }
@@ -142,7 +161,10 @@ button:hover {
 <h1>夜の大人診断</h1>
 
 <div id="quiz">
-  <div class="progress-bar"><div class="progress-bar-inner" id="progress"></div></div>
+  <div class="progress-bar">
+  <div class="progress-bar-inner" id="progress"></div>
+  <div class="progress-percent" id="progress-percent">0%</div>
+</div>
   <div id="question-container"></div>
 </div>
 
@@ -171,29 +193,30 @@ button:hover {
   <button onclick="location.reload()">もう1度診断する</button>
 </div>
 
+
 <script>
 // ----------------質問リスト----------------
 const questions = [
-  { text: "夜は自分でリードしたい派ですか？", direction:"D", axis:"DS", options: ["絶対にリードしたくない","リードしたくない","そこまでリードしたくない","少しはリードしたい","リードしたい","絶対にリードしたい"] },
-  { text: "相手に指示されるより、自分の好みを伝えたいですか？", direction:"D", axis:"DS", options: ["絶対に伝えたくない","伝えたくない","聞かれたら伝えても良い","少しは伝えたい","伝えたい","絶対に伝えたい"] },
-  { text: "快楽を最優先に行動しますか？", direction:"F", axis:"FE", options: ["絶対に優先したくない","優先したくない","ちょっとなら優先しても良い","少しは優先したい","優先したい","絶対に優先したい"] },
-  { text: "心のつながりを感じられると興奮しますか？", direction:"E", axis:"FE", options: ["全く興奮しない","興奮しない","あんまり興奮しない","少し興奮する","結構興奮する","めっちゃ興奮する"] },
+  { text: "夜は自分でリードしたい派ですか？それともリードされたい派ですか？", direction:"D", axis:"DS", options: ["絶対にリードされたい","リードされたい","できればリードされたい","できればリードしたい","リードしたい","絶対にリードしたい"] },
+  { text: "相手に指示されるより、自分の好みを優先したいですか？", direction:"D", axis:"DS", options: ["絶対に相手に従いたい","相手に従いたい","できれば相手に従いたい","できれば自分の好みを優先したい","自分の好みを優先したい","絶対に自分の好みを優先したい"] },
+  { text: "快楽を優先して行動しますか？", direction:"F", axis:"FE", options: ["絶対に優先しない","優先しない","あまり優先しない","少し優先する","優先する","絶対に優先する"] },
+  { text: "心のつながりを感じることで興奮しますか？", direction:"E", axis:"FE", options: ["全く興奮しない","興奮しない","あまり興奮しない","少し興奮する","興奮する","めっちゃ興奮する"] },
   { text: "性的欲望は隠さずオープンに表現しますか？", direction:"O", axis:"OC", options: ["絶対に隠す","隠す","できるだけ隠す","少しは表現する","表現する","めっちゃ表現する"] },
   { text: "関係が浅くても性の本性を見せられますか？", direction:"O", axis:"OC", options: ["絶対に見せたくない","見せたくない","できるだけ見せたくない","少しは見せたい","見せたい","めっちゃ見せたい"] },
   { text: "新しいプレイやシチュエーションに挑戦するのが好きですか？", direction:"A", axis:"AN", options: ["絶対に挑戦したくない","挑戦したくない","できるだけ挑戦したくない","少しは挑戦したい","挑戦したい","めっちゃ挑戦したい"] },
   { text: "安定したルーティン的なプレイが心地よいですか？", direction:"N", axis:"AN", options: ["全く物足りない","物足りない","少し物足りない","少しは心地よい","心地よい","めっちゃ心地よい"] },
-  { text: "プレイ中、相手の感情や反応を気にしますか？", direction:"S", axis:"DS", options: ["全く気にしない","あまり気にしない","ちょっとは気にする","少し気にする","普通に気にする","めっちゃ気にする"] },
-  { text: "感情の高まりに身を任せることはありますか？", direction:"F", axis:"FE", options: ["全くない","ほぼない","あまりない","ややある","結構ある","めっちゃある"] },
-  { text: "遊びや実験的プレイに抵抗はありますか？", direction:"C", axis:"OC", options: ["逆に不可欠","全く抵抗ない","抵抗ない","少しは抵抗ある","抵抗ある","めっちゃ抵抗ある"] },
-  { text: "プレイ中に新しいことに挑戦するのはワクワクしますか？", direction:"A", axis:"AN", options: ["全くワクワクしない","ワクワクしない","そんなにワクワクしない","少しワクワクする","ワクワクする","めっちゃワクワクする"] },
-  { text: "安定感のある従順なプレイを好みますか？", direction:"N", axis:"AN", options: ["全く好まない","好まない","あまり好まない","嫌ではない","好む","めっちゃ好む"] },
+  { text: "プレイ中、相手と自分どちらの快楽を重視しますか？", direction:"E", axis:"FE", options: ["完全に自分","自分","どちらかというと自分","どちらかというと相手","相手","完全に相手"] },
+  { text: "感情の高まりに身を任せることはありますか？", direction:"F", axis:"FE", options: ["全くない","ほぼない","あまりない","たまにある","割とある","めっちゃある"] },
+  { text: "遊びや実験的プレイに抵抗はありますか？", direction:"C", axis:"OC", options: ["逆に不可欠","全く抵抗ない","抵抗ない","少し抵抗ある","抵抗ある","めっちゃ抵抗ある"] },
+  { text: "プレイ中に新しいことに挑戦するのはワクワクしますか？", direction:"A", axis:"AN", options: ["全くワクワクしない","ワクワクしない","あまりワクワクしない","少しワクワクする","ワクワクする","めっちゃワクワクする"] },
+  { text: "相手の要求であれば多少嫌でも受け入れますか？", direction:"S", axis:"DS", options: ["絶対に受け入れない","受け入れない","受け入れる余地はある","少しは受け入れる","受け入れる","喜んで受け入れる"] },
   { text: "相手の気持ちを優先しすぎて自分の快楽は後回しになることがありますか？", direction:"E", axis:"FE", options: ["全くない","ない","あまりない","たまにある","ある","めっちゃある"] },
   { text: "性的な楽しみを遠慮なく受け止められますか？", direction:"O", axis:"OC", options: ["全く受け止められない","受け止められない","あまり受け止められない","少しは受け止められる","受け止められる","めっちゃ受け止められる"] },
   { text: "好奇心旺盛で性欲に従順な方ですか？", direction:"A", axis:"AN", options: ["全く従順でない","従順ではない","あまり従順ではない","少しは従順","従順","めっちゃ従順"] },
   { text: "秘密の関係が好きですか？", direction:"O", axis:"OC", options: ["全く好きでない","好きではない","あまり好きではない","少しは好き","好き","めっちゃ好き"] },
   { text: "安定感・安心感を重視しますか？", direction:"N", axis:"AN", options: ["全く重視しない","重視しない","あまり重視しない","やや重視する","重視する","めっちゃ重視する"] },
   { text: "恋愛や愛情表現が重要ですか？", direction:"E", axis:"FE", options: ["全く重要でない","重要ではない","あまり重要ではない","やや重要","重要","めっちゃ重要"] },
-  { text: "究極の尽くし系ですか？", direction:"N", axis:"AN", options: ["全く尽くさない","尽くさない","あまり尽くさない","やや尽くす","尽くす","めっちゃ尽くす"] },
+  { text: "相手に尽くす/尽くされたいタイプのどちらですか？", direction:"D", axis:"DS", options: ["めっちゃ尽くされたい","尽くされたい","どちらかというと尽くされたい","どちらかというと尽くしたい","尽くしたい","めっちゃ尽くしたい"] },
 ];
 
 // ----------------タイプ説明文----------------
@@ -223,23 +246,46 @@ const axisDirectionMap = { DS: 'D', FE: 'F', OC: 'O', AN: 'A' };
 
 // ----------------関数----------------
 function showQuestion() {
-  if(current >= questions.length) {
-    showResult();
-    return;
-  }
-  const q = questions[current];
   const questionContainer = document.getElementById("question-container");
- questionContainer.innerHTML = `
-  <div class="question"><strong>Q${current+1}:</strong> ${q.text}</div>
+
+  if(current >= questions.length) {
+    // 最後の質問が終わったら「結果を見る」ボタン表示
+    questionContainer.innerHTML = `
+  <div class="question finished">あなたの夜の大人診断結果が出ました。</div>
   <div class="options">
-    ${q.options.map((opt,i)=>`<button onclick="selectAnswer('${q.axis}',${i+1},'${q.direction}')">${opt}</button>`).join("")}
+    <button onclick="showResult()">結果を見る</button>
   </div>
 `;
 
 
-  // プログレスバー更新
+    // プログレスバーを100%に
+    const progress = document.getElementById("progress");
+    const progressPercent = document.getElementById("progress-percent");
+    progress.style.width = `100%`;
+    progressPercent.textContent = `100%`;
+
+    const barWidth = progress.parentElement.offsetWidth;
+    progressPercent.style.left = `${barWidth - 30}px`; // 右端に固定
+    return;
+  }
+
+  const q = questions[current];
+  questionContainer.innerHTML = `
+    <div class="question"><strong>Q${current+1}:</strong> ${q.text}</div>
+    <div class="options">
+      ${q.options.map((opt,i)=>`<button onclick="selectAnswer('${q.axis}',${i+1},'${q.direction}')">${opt}</button>`).join("")}
+    </div>
+  `;
+
+  // プログレスバー更新（現在の質問に応じて％）
   const progress = document.getElementById("progress");
-  progress.style.width = `${(current / questions.length) * 100}%`;
+  const progressPercent = document.getElementById("progress-percent");
+  const percent = Math.round((current / questions.length) * 100);
+  progress.style.width = `${percent}%`;
+  progressPercent.textContent = `${percent}%`;
+
+  const barWidth = progress.parentElement.offsetWidth;
+  progressPercent.style.left = `${Math.min(barWidth * (percent / 100) - 15, barWidth - 30)}px`;
 }
 
 function selectAnswer(axis, value, direction) {
@@ -247,29 +293,6 @@ function selectAnswer(axis, value, direction) {
   answers.push({axis, score});
   current++;
   showQuestion();
-}
-
-function showResult() {
-  document.getElementById("quiz").style.display = "none"; // クイズ非表示
-  const axes = {DS:0, FE:0, OC:0, AN:0};
-  answers.forEach(a => axes[a.axis] += a.score);
-
-  const code =
-    (axes.DS >= 0 ? "D" : "S") + "-" +
-    (axes.FE >= 0 ? "F" : "E") + "-" +
-    (axes.OC >= 0 ? "O" : "C") + "-" +
-    (axes.AN >= 0 ? "A" : "N");
-
-  const type = types[code] || types["S-F-O-A"];
-  const resultDiv = document.getElementById("result");
-  resultDiv.style.display = "block"; // 結果表示
-
-  document.getElementById("result-code").textContent = `あなたのタイプは ${code}`;
-  document.getElementById("result-name").textContent = type.name;
-  document.getElementById("result-desc").textContent = type.desc;
-  document.getElementById("result-img").src = `images/${code}.jpg`;
-  document.getElementById("result-img").alt = type.name;
-
 }
 
 function showResult() {
