@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>夜の大人診断 - ホーム</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+
 <style>
 body {
   font-family: 'Noto Sans JP', sans-serif;
@@ -23,6 +24,18 @@ h1 {
   z-index: 2;
   position: relative;
 }
+.logo-title {
+  margin-top: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-title img {
+  width: 350px; /* 適宜調整 */
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6));
+}
+
 p {
   font-size: 18px;
   margin: 20px auto;
@@ -31,6 +44,7 @@ p {
   z-index: 2;
   position: relative;
 }
+
 button {
   background: #d32f2f;
   color: #fff;
@@ -94,7 +108,10 @@ button:hover {
 <img src="images/S-F-C-A.jpg" class="bg-character" alt="">
 <img src="images/D-E-C-N.jpg" class="bg-character" alt="">
 
-<h1>夜の大人診断</h1>
+<h1 class="logo-title">
+  <img src="images/title-logo.png" alt="夜の大人診断">
+</h1>
+
 <p>あなたの「夜の大人度」を診断して、16タイプのキャラクターに分類します。<br>自分の性格や好みを探るちょっと刺激的な診断です。</p>
 <div class="button-container">
   <button onclick="location.href='quiz.html'">診断をスタート</button>
