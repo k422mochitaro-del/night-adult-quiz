@@ -21,6 +21,18 @@ h1 {
   font-size: 24px;
   text-transform: uppercase;
 }
+.logo-title {
+  margin-top: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-title img {
+  width: 250px; /* 適宜調整 */
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6));
+}
+
 #quiz {
   max-width: 480px;
   margin: 0 auto;
@@ -86,6 +98,24 @@ button:hover {
   border-radius: 12px;
   object-fit: cover;
   box-shadow: 0 0 25px #d32f2f;  /* 少し影を大きく */
+}
+#types-btn {
+  background: linear-gradient(45deg, #6a1b9a, #ab47bc);
+  color: #fff;
+  border: 2px solid #ce93d8;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(171, 71, 188, 0.6);
+  transition: 0.3s;
+}
+
+#types-btn:hover {
+  background: linear-gradient(45deg, #ab47bc, #ce93d8);
+  box-shadow: 0 0 25px rgba(171, 71, 188, 0.8);
+  transform: translateY(-2px);
 }
 .share-btn {
   display: inline-flex;
@@ -158,7 +188,9 @@ button:hover {
 </head>
 <body>
 
-<h1>夜の大人診断</h1>
+<h1 class="logo-title">
+  <img src="images/title-logo.png" alt="夜の大人診断">
+</h1>
 
 <div id="quiz">
   <div class="progress-bar">
@@ -174,7 +206,13 @@ button:hover {
   <p id="result-desc"></p>
   <img id="result-img" alt="">
   <br>
+
+  <!-- 16タイプ説明ボタン（最初は非表示） -->
+  <button id="types-btn" onclick="location.href='explanation.html'" style="display:none; margin-top:15px;">
+    16タイプ説明を見る
+  </button>
 </div>
+
 
 <div id="share-buttons" style="margin-top:15px; text-align:center; display:none;">
   <a id="share-twitter-btn" target="_blank" class="share-btn twitter">
@@ -188,10 +226,12 @@ button:hover {
   </a>
 </div>
 
-<div class="result-buttons" style="margin-top:30px;">
+<div class="result-buttons" style="margin-top:30px; text-align:center;">
+  <!-- 常に表示 -->
   <button onclick="location.href='index.html'">ホームへ戻る</button>
   <button onclick="location.reload()">もう1度診断する</button>
 </div>
+
 
 
 <script>
@@ -315,6 +355,9 @@ function showResult() {
   document.getElementById("result-desc").textContent = type.desc;
   document.getElementById("result-img").src = `images/${code}.jpg`;
   document.getElementById("result-img").alt = type.name;
+
+  // 結果画面になったら16タイプ説明ボタンを表示
+document.getElementById("types-btn").style.display = "inline-block";
 
   // SNSシェアボタンを表示
   const shareButtons = document.getElementById("share-buttons");
