@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>16タイプ相性一覧表</title>
+<style>
+body { font-family:'Noto Sans JP'; background:#111; color:#fff; text-align:center; }
+table { border-collapse:collapse; margin:20px auto; }
+th, td { border:1px solid #fff; padding:5px; text-align:center; min-width:60px; }
+th { background:#222; vertical-align:middle; }
+th img { width:50px; height:50px; border-radius:50%; object-fit:cover; display:block; margin:0 auto; }
+th .code { font-size:12px; margin-top:2px; color:#ccc; }
+td { font-size:18px; font-weight:bold; }
+/* スコア色 */
+.score-5 { color:red; font-weight:bold; }     /* ◎ */
+.score-2 { color:red; }                       /* ○ */
+.score-1 { color:gray; }                      /* △ */
+.score0  { color:gray; }                      /* △ */
+.score-2to4 { color:red; }                    /* ○ 2~4 */
+.score-neg { color:blue; }                    /* × -2~-4 */
+.score-5neg { color:blue; font-weight:bold; } /* ◎ -5 */
+button { margin:20px; padding:10px 20px; font-size:16px; border-radius:8px; border:none; background:#d32f2f; color:#fff; cursor:pointer; }
+button:hover { background:#f44336; }
+</style>
+</head>
+<body>
+
+<h1>16タイプ相性一覧表</h1>
+<button onclick="location.href='index.html'">ホームへ戻る</button>
+
+<table id="compatibility-matrix"></table>
+
+<script>
+const types = [
+  "D-F-O-A","D-F-O-N","D-F-C-A","D-F-C-N",
+  "D-E-O-A","D-E-O-N","D-E-C-A","D-E-C-N",
+  "S-F-O-A","S-F-O-N","S-F-C-A","S-F-C-N",
+  "S-E-O-A","S-E-O-N","S-E-C-A","S-E-C-N"
+];
+
+const typeData = {
+  "D-F-O-A": { img:"images/D-F-O-A.jpg", name:"ライオン", code:"D-F-O-A" },
+  "D-F-O-N": { img:"images/D-F-O-N.jpg", name:"トラ", code:"D-F-O-N" },
+  "D-F-C-A": { img:"images/D-F-C-A.jpg", name:"タカ", code:"D-F-C-A" },
+  "D-F-C-N": { img:"images/D-F-C-N.jpg", name:"オオカミ", code:"D-F-C-N" },
+  "D-E-O-A": { img:"images/D-E-O-A.jpg", name:"ユニコーン", code:"D-E-O-A" },
+  "D-E-O-N": { img:"images/D-E-O-N.jpg", name:"キツネ", code:"D-E-O-N" },
+  "D-E-C-A": { img:"images/D-E-C-A.jpg", name:"フクロウ", code:"D-E-C-A" },
+  "D-E-C-N": { img:"images/D-E-C-N.jpg", name:"クマ", code:"D-E-C-N" },
+  "S-F-O-A": { img:"images/S-F-O-A.jpg", name:"サル", code:"S-F-O-A" },
+  "S-F-O-N": { img:"images/S-F-O-N.jpg", name:"ネコ", code:"S-F-O-N" },
+  "S-F-C-A": { img:"images/S-F-C-A.jpg", name:"カメレオン", code:"S-F-C-A" },
+  "S-F-C-N": { img:"images/S-F-C-N.jpg", name:"ウサギ", code:"S-F-C-N" },
+  "S-E-O-A": { img:"images/S-E-O-A.jpg", name:"ハト", code:"S-E-O-A" },
+  "S-E-O-N": { img:"images/S-E-O-N.jpg", name:"イヌ", code:"S-E-O-N" },
+  "S-E-C-A": { img:"images/S-E-C-A.jpg", name:"コウモリ", code:"S-E-C-A" },
+  "S-E-C-N": { img:"images/S-E-C-N.jpg", name:"シカ", code:"S-E-C-N" }
+};
+
+function getCompatibilityScore(type1, type2){
+  if(type1===type2) return 0;
+  const [d1,f1,o1,a1] = type1.split("-");
+  const [d2,f2,o2,a2] = type2.split("-");
+  let score=0;
+  if((d1==="D"&&d2==="S")||(d1==="S"&&d2==="D")) score+=2;
+  else if(d1===d2) score-=2;
+  score += (f1===f2)?1:-1;
+  if(o1===o2) score+=1;
+  score += (a1===a2)?1:-1;
+  return score;
+}
+
+function scoreToSymbol(score){
+  if(score===5) return '<span class="score-5">◎</span>';
+  if(score>=2) return '<span class="score-2">○</span>';
+  if(score>=-1 && score<=1) return '<span class="score-1">△</span>';
+  if(score>=-4 && score<=-2) return '<span class="score-neg">×</span>';
+  if(score===-5) return '<span class="score-5neg">×</span>';
+  return '?';
+}
+
+// テーブル生成
+const table = document.getElementById('compatibility-matrix');
+let headerRow = '<tr><th></th>';
+types.forEach(t=>{
+  headerRow += `<th title="${typeData[t].name}">
+                  <img src="${typeData[t].img}" alt="${typeData[t].name}">
+                  <div class="code">${typeData[t].code}</div>
+                </th>`;
+});
+headerRow += '</tr>';
+table.innerHTML = headerRow;
+
+types.forEach(rowType=>{
+  let row = `<tr><th title="${typeData[rowType].name}">
+                <img src="${typeData[rowType].img}" alt="${typeData[rowType].name}">
+                <div class="code">${typeData[rowType].code}</div>
+              </th>`;
+  types.forEach(colType=>{
+    const score = getCompatibilityScore(rowType,colType);
+    row += `<td>${scoreToSymbol(score)}</td>`;
+  });
+  row += '</tr>';
+  table.innerHTML += row;
+});
+</script>
+
+</body>
+</html>
