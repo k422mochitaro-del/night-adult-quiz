@@ -31,7 +31,9 @@ p { line-height:1.6; max-width:600px; margin:10px auto; }
   background: rgba(255,255,255,0.05);
   border:1px solid #fff;
   border-radius:15px;
-  width:150px;
+  width: 45%;   /* 固定150pxをやめる */
+  max-width: 180px;
+  min-width: 140px;
   cursor:pointer;
   transition:0.3s;
   text-align:center;
@@ -62,29 +64,33 @@ button:hover {
 }
 
 /* モーダル */
+/* モーダル背景 */
 #detail-modal {
-  display: none;
+  display: none;          /* 初期は非表示 */
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.8);
   z-index: 9999;
-  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px; /* 上下左右に余白 */
+  box-sizing: border-box;
 }
 
+/* モーダルコンテンツ */
 #detail-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: #222;
   padding: 20px;
   border-radius: 15px;
   max-width: 400px;
-  width: 90%;
+  width: 100%;
+  max-height: 90%;         /* 画面の90%まで */
+  overflow-y: auto;        /* 中身が多いとスクロール */
   box-sizing: border-box;
   text-align: center;
 }
+
 
 #detail-content img.main-img { width:100%; border-radius:10px; }
 #detail-content h3 { margin-top:10px; }
@@ -133,7 +139,7 @@ button:hover {
 }
 
 .heart-container span {
-  font-size: 12px; /* 小さくする場合は値を調整 */
+  font-size: 15px; /* 小さくする場合は値を調整 */
 }
 
 .home-button { margin:30px; }
@@ -193,22 +199,22 @@ button:hover {
 <script>
 // ----- タイプデータ -----
 const typeData = {
-  "D-F-O-A": {name:"絶対主導権握りたい肉体モンスター", animal:"ライオン", img:"images/D-F-O-A.jpg", desc:"本能のまま主導権を握り、肉体的な刺激を追い求める情熱的なタイプ。", best:["S-F-O-A","S-F-O-N","S-E-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
-  "D-F-O-N": {name:"理性ぶったセックス中毒者", animal:"トラ", img:"images/D-F-O-N.jpg", desc:"頭では理性を保っているつもりでも快楽に抗えない中毒者。", best:["S-F-O-N","S-E-O-A","S-F-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
-  "D-F-C-A": {name:"ドSな快楽マッドサイエンティスト", animal:"タカ", img:"images/D-F-C-A.jpg", desc:"快楽の可能性を探求するドS研究者。", best:["S-F-C-A","S-F-C-N","S-E-C-A"], worst:["D-F-O-N","D-E-O-N","S-E-O-N"]},
-  "D-F-C-N": {name:"肉体信仰の支配リーダー", animal:"オオカミ", img:"images/D-F-C-N.jpg", desc:"主導権を握りたい強い支配欲を持つリーダー気質。", best:["S-F-C-N","S-E-C-N","S-F-C-A"], worst:["D-F-O-A","D-E-O-A","S-E-O-A"]},
-  "D-E-O-A": {name:"愛を説く支配系ロマンチスト", animal:"ユニコーン", img:"images/D-E-O-A.jpg", desc:"支配欲と愛を語るロマンチックタイプ。", best:["S-E-O-A","S-E-O-N","S-F-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
-  "D-E-O-N": {name:"甘やかしドSカリスマ", animal:"キツネ", img:"images/D-E-O-N.jpg", desc:"相手を支配しつつ甘やかすカリスマ的存在。", best:["S-E-O-N","S-F-O-N","S-E-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
-  "D-E-C-A": {name:"幻想的SM詩人", animal:"フクロウ", img:"images/D-E-C-A.jpg", desc:"愛や感情を幻想的に表現しSM的要素も楽しむ芸術家。", best:["S-E-C-A","S-F-C-A","S-F-C-N"], worst:["D-E-O-N","D-F-O-N","S-E-O-N"]},
-  "D-E-C-N": {name:"重たい愛の支配者", animal:"クマ", img:"images/D-E-C-N.jpg", desc:"愛情が深すぎて相手を縛りつけるほどの支配力を発揮する。", best:["S-E-C-N","S-F-C-N","S-F-C-A"], worst:["D-E-O-A","D-F-O-A","S-E-O-A"]},
-  "S-F-O-A": {name:"快楽を追い求める猿系モンスター", animal:"サル", img:"images/S-F-O-A.jpg", desc:"ひたすら快楽に忠実でエネルギッシュなタイプ。", best:["D-F-O-A","D-F-O-N","S-E-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
-  "S-F-O-N": {name:"セクシャル従順ペット", animal:"ネコ", img:"images/S-F-O-N.jpg", desc:"子猫のように従順で相手の望みを叶えることに喜びを感じる。", best:["D-F-O-N","S-E-O-N","S-F-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
-  "S-F-C-A": {name:"隠れ変態チャレンジャー", animal:"カメレオン", img:"images/S-F-C-A.jpg", desc:"新しい快楽への挑戦に積極的な隠れ変態タイプ。", best:["D-F-C-A","S-F-C-N","S-E-C-A"], worst:["D-F-O-N","D-E-O-N","S-E-O-N"]},
-  "S-F-C-N": {name:"おとなしい肉体奉仕者", animal:"ウサギ", img:"images/S-F-C-N.jpg", desc:"相手を満足させることを喜びとする献身タイプ。", best:["D-F-C-N","S-F-C-A","S-E-C-N"], worst:["D-F-O-A","D-E-O-A","S-E-O-A"]},
-  "S-E-O-A": {name:"恋愛依存のセックスロマンチスト", animal:"ハト", img:"images/S-E-O-A.jpg", desc:"恋愛感情と快感を結びつけ愛を求め続ける情熱家。", best:["D-E-O-A","S-F-O-A","S-E-O-N"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
-  "S-E-O-N": {name:"純愛に溺れるベッドの仔犬", animal:"イヌ", img:"images/S-E-O-N.jpg", desc:"愛情に包まれることを大切にする純粋な仔犬タイプ。", best:["D-E-O-N","S-F-O-N","S-E-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
-  "S-E-C-A": {name:"秘密主義の危険な夢想家", animal:"コウモリ", img:"images/S-E-C-A.jpg", desc:"秘密を抱えつつ幻想的な夢想家。", best:["D-E-C-A","S-F-C-A","S-F-C-N"], worst:["D-E-O-N","D-F-O-N","S-E-O-N"]},
-  "S-E-C-N": {name:"究極の尽くし系セックス聖人", animal:"シカ", img:"images/S-E-C-N.jpg", desc:"相手の欲望を受け止める献身タイプ。", best:["D-E-C-N","S-F-C-N","S-F-C-A"], worst:["D-E-O-A","D-F-O-A","S-E-O-A"]}
+  "D-F-O-A": {name:"絶対主導権握りたい肉体モンスター", animal:"ライオン", img:"images/D-F-O-A.jpg", desc:"本能のまま主導権を握り、肉体的な刺激を追い求める情熱的なタイプ。相手を圧倒するカリスマを持ちます。", best:["S-F-O-A","S-F-O-N","S-E-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "D-F-O-N": {name:"理性ぶったセックス中毒者", animal:"トラ", img:"images/D-F-O-N.jpg", desc:"頭では理性を保っているつもりでも、実は快楽に抗えない隠れ中毒者。理性と欲望の狭間で揺れ動きます。", best:["S-F-O-N","S-E-O-A","S-F-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "D-F-C-A": {name:"ドSな快楽マッドサイエンティスト", animal:"タカ", img:"images/D-F-C-A.jpg", desc:"相手を実験台にするかのように、快楽の可能性を探求するドS研究者タイプ。常に新しい刺激を求めます。", best:["S-F-C-A","S-F-C-N","S-E-C-A"], worst:["D-F-O-N","D-E-O-N","S-E-O-N"]},
+  "D-F-C-N": {name:"肉体信仰の支配リーダー", animal:"オオカミ", img:"images/D-F-C-N.jpg", desc:"愛よりも肉体的な快感を重視し、主導権を握りたい強い支配欲を持つリーダー気質。", best:["S-F-C-N","S-E-C-N","S-F-C-A"], worst:["D-F-O-A","D-E-O-A","S-E-O-A"]},
+  "D-E-O-A": {name:"愛を説く支配系ロマンチスト", animal:"ユニコーン", img:"images/D-E-O-A.jpg", desc:"支配欲と同時に愛を語り、ロマンチックに相手を導くタイプ。情熱と優しさの二面性を持ちます。", best:["S-E-O-A","S-E-O-N","S-F-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "D-E-O-N": {name:"甘やかしドSカリスマ", animal:"キツネ", img:"images/D-E-O-N.jpg", desc:"相手を支配しつつも、時には甘やかす。Sっ気と包容力を兼ね備えたカリスマ的存在です。", best:["S-E-O-N","S-F-O-N","S-E-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "D-E-C-A": {name:"幻想的SM詩人", animal:"フクロウ", img:"images/D-E-C-A.jpg", desc:"愛や感情を幻想的に表現しながら、SM的要素も楽しむ芸術家気質のロマンチスト。", best:["S-E-C-A","S-F-C-A","S-F-C-N"], worst:["D-E-O-N","D-F-O-N","S-E-O-N"]},
+  "D-E-C-N": {name:"重たい愛の支配者", animal:"クマ", img:"images/D-E-C-N.jpg", desc:"愛情が深すぎて、時に相手を縛りつけるほどの重たい支配力を発揮するタイプ。", best:["S-E-C-N","S-F-C-N","S-F-C-A"], worst:["D-E-O-A","D-F-O-A","S-E-O-A"]},
+  "S-F-O-A": {name:"快楽を追い求める猿系モンスター", animal:"サル", img:"images/S-F-O-A.jpg", desc:"ひたすら快楽に忠実で、飽くなき欲求を追い続けるエネルギッシュなタイプ。", best:["D-F-O-A","D-F-O-N","S-E-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "S-F-O-N": {name:"セクシャル従順ペット", animal:"ネコ", img:"images/S-F-O-N.jpg", desc:"子猫のように従順で、相手の望みを叶えることに喜びを感じる可愛らしいタイプ。", best:["D-F-O-N","S-E-O-N","S-F-O-A"], worst:["D-F-C-N","D-E-C-N","S-E-C-N"]},
+  "S-F-C-A": {name:"隠れ変態チャレンジャー", animal:"カメレオン", img:"images/S-F-C-A.jpg", desc:"一見大人しそうに見えて、実は新しい快楽への挑戦に積極的な隠れ変態タイプ。", best:["D-F-C-A","S-F-C-N","S-E-C-A"], worst:["D-F-O-N","D-E-O-N","S-E-O-N"]},
+  "S-F-C-N": {name:"おとなしい肉体奉仕者", animal:"ウサギ", img:"images/S-F-C-N.jpg", desc:"大人しく従順で、相手を満足させることを自らの喜びとする献身的なタイプ。", best:["D-F-C-N","S-F-C-A","S-E-C-N"], worst:["D-F-O-A","D-E-O-A","S-E-O-A"]},
+  "S-E-O-A": {name:"恋愛依存のセックスロマンチスト", animal:"ハト", img:"images/S-E-O-A.jpg", desc:"恋愛感情と快感を強く結びつけ、愛を求め続けるロマンチックな情熱家。", best:["D-E-O-A","S-F-O-A","S-E-O-N"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "S-E-O-N": {name:"純愛に溺れるベッドの仔犬", animal:"イヌ", img:"images/S-E-O-N.jpg", desc:"愛情に包まれることを何よりも大切にし、相手に尽くす純粋な仔犬タイプ。", best:["D-E-O-N","S-F-O-N","S-E-O-A"], worst:["D-E-C-N","D-F-C-N","S-E-C-N"]},
+  "S-E-C-A": {name:"秘密主義の危険な夢想家", animal:"コウモリ", img:"images/S-E-C-A.jpg", desc:"秘密を抱えつつ、危うい魅力を放つ幻想的な夢想家。ミステリアスな一面が特徴です。", best:["D-E-C-A","S-F-C-A","S-F-C-N"], worst:["D-E-O-N","D-F-O-N","S-E-O-N"]},
+  "S-E-C-N": {name:"究極の尽くし系セックス聖人", animal:"シカ", img:"images/S-E-C-N.jpg", desc:"愛情深く、相手の欲望をひたすら受け止める究極の献身タイプ。", best:["D-E-C-N","S-F-C-N","S-F-C-A"], worst:["D-E-O-A","D-F-O-A","S-E-O-A"]}
 };
 
 // カード生成
@@ -252,7 +258,7 @@ function getBestAndWorst(typeKey){
 function createHearts(rank,type){
   const container = document.createElement('div');
   container.className='heart-container';
-  const heartChar = type==='best'?'❤️':'💙';
+  const heartChar = type==='best'?'💋':'🥀';
   for(let i=0;i<rank;i++){
     const span = document.createElement('span');
     span.textContent = heartChar;
@@ -268,6 +274,14 @@ function openDetail(code){
   document.getElementById('detail-img').src=data.img;
   document.getElementById('detail-name').textContent=`${code} - ${data.animal}`;
   document.getElementById('detail-desc').textContent=data.desc;
+
+  document.getElementById('detail-modal').onclick = (e)=>{
+  if(e.target.id === 'detail-modal') closeDetail();
+};
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeDetail();
+});
+
 
   const {best,worst} = getBestAndWorst(code);
 
