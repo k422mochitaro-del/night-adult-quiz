@@ -103,6 +103,25 @@ button:hover {
 }
 #detail-content .close-btn:hover { background:#f44336; }
 
+#detail-page-btn {
+  background: #f44336;        /* ボタン色 */
+  color: #fff;                /* 文字色 */
+  border: none;
+  padding: 10px 25px;         /* 高さと横幅の調整 */
+  font-size: 16px;            /* 文字サイズ */
+  font-weight: bold;
+  border-radius: 8px;         /* 角丸 */
+  cursor: pointer;
+  margin-top: 15px;           /* 上とのスペース */
+  display: inline-block;
+}
+
+#detail-page-btn:hover {
+  background: #ff1744;        /* ホバー時の色 */
+  transform: translateY(-2px);
+  transition: 0.2s;
+}
+
 #detail-worst {
   margin-top: 10px; /* 上にスペースを追加 */
 }
@@ -192,6 +211,10 @@ button:hover {
     <p id="detail-desc"></p>
     <div id="detail-best"><strong>ベスト相性:</strong></div>
     <div id="detail-worst"><strong>ワースト相性:</strong></div>
+    
+    <!-- 新規追加: 詳細ページボタン -->
+    <button id="detail-page-btn">詳細ページ</button>
+
     <button class="close-btn" onclick="closeDetail()">閉じる</button>
   </div>
 </div>
@@ -282,6 +305,19 @@ document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape') closeDetail();
 });
 
+
+  // 詳細ページボタンを設定
+  const detailBtn = document.getElementById('detail-page-btn');
+  detailBtn.onclick = () => {
+    location.href = `detail_${code}.html`; // ページ名の形式に合わせる
+  };
+
+  document.getElementById('detail-modal').onclick = (e)=>{
+    if(e.target.id === 'detail-modal') closeDetail();
+  };
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeDetail();
+  });
 
   const {best,worst} = getBestAndWorst(code);
 
