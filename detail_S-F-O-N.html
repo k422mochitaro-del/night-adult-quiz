@@ -80,8 +80,11 @@ p {
   line-height: 1.6;
 }
 .home-button {
-  text-align: center;
-  margin: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px 0;
+  flex-wrap: wrap; /* スマホでは折り返し */
 }
 button {
   background: #d32f2f;
@@ -95,18 +98,17 @@ button {
 button:hover {
   background: linear-gradient(45deg,#b71c1c,#f44336);
 }
-@media(max-width: 768px){
-  .type-detail-container {
-    flex-direction: column; /* 上下に切り替え */
-    align-items: center;    /* 中央寄せ */
+@media(max-width:600px){
+  .container {
+    flex-direction: column;  /* 縦並び */
+    align-items: center;
   }
-  .type-image {
-    margin-left: 0;   /* PC用の左余白をリセット */
+  .left {
+    margin-bottom: 20px;  /* 画像と説明文の間に余白 */
   }
-  .type-text {
-    text-align: center; /* スマホでは中央寄せ推奨 */
+  .right {
     width: 100%;
-    margin-top: 20px;
+    text-align: left;     /* スマホでも読みやすく左寄せ */
   }
 }
 </style>
@@ -171,6 +173,7 @@ button:hover {
 
 <div class="home-button">
   <button onclick="location.href='index.html'">ホームへ戻る</button>
+  <button onclick="location.href='explanation.html'">16タイプ説明</button>
 </div>
 
 </body>
