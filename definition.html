@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>16タイプ紹介ページ</title>
+<title>４つの軸</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
 <style>
 body {
@@ -97,7 +97,7 @@ button:hover {
 #detail-content p { margin:10px 0; }
 #detail-content .close-btn {
   margin-top:15px;
-  background:#f44336;
+  background:#b71c1c;
   padding:10px 20px;
   border-radius:8px;
 }
@@ -166,17 +166,38 @@ button:hover {
 </head>
 <body>
 
-<h1>16タイプ紹介</h1>
+<h1>4つの軸</h1>
+<section id="type-explanation" style="padding:50px 20px;">
+  <h2>D/S軸（リード軸）</h2>
+  <p>
+      <strong>D (Dominant)</strong>：主導権を握るタイプ。恋愛や関係においてリードしたい、決定権を持ちたい人。積極的で自分の意思をはっきり示す傾向があります。<br>
+      <strong>S (Submissive)</strong>：委ねるタイプ。相手に身を任せることで安心感を得る人。従順で控えめですが、信頼できる相手には深い愛情を示します。
+    </p>
 
-<section id="type-cards">
-  
-  <div class="type-grid" id="grid"></div>
+    <h2>F/E軸（感情軸）</h2>
+    <p>
+      <strong>F (Physical)</strong>：肉体的な快楽や感覚的な刺激を重視。触れ合いや身体的な楽しみから喜びや満足感を得やすいタイプです。<br>
+      <strong>E (Emotional)</strong>：精神的なつながりを重視。心の交流や感情的な絆を重視し、恋愛や関係においては愛情や信頼を第一に考えます。
+    </p>
+
+    <h2>O/C軸（開放軸）</h2>
+    <p>
+      <strong>O (Open)</strong>：性や感情表現をオープンに示すタイプ。好奇心旺盛で、楽しさや快楽を隠さず表現します。<br>
+      <strong>C (Closed)</strong>：心を許した相手にだけ自分を見せるタイプ。慎重で控えめ、信頼できる関係で深くつながることを好みます。
+    </p>
+
+    <h2>A/N軸（刺激軸）</h2>
+    <p>
+      <strong>A (Adventurous)</strong>：新しい刺激や変化を求めるタイプ。挑戦や冒険を楽しみ、恋愛や快楽においても好奇心が旺盛です。<br>
+      <strong>N (Normal)</strong>：安定や安心を求めるタイプ。変化よりも落ち着いた関係や安全な環境を好み、安心感を重視します。
+    </p>
 </section>
+
 
 <div class="home-button">
   <button onclick="location.href='index.html'">ホームへ戻る</button>
+  <button onclick="location.href='explanation.html'">16タイプ説明</button>
   <button onclick="location.href='matrix.html'">16タイプ相性一覧表</button>
-  <button onclick="location.href='definition.html'">4つの軸</button>
 </div>
 
 <!-- モーダル -->
