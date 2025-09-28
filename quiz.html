@@ -117,6 +117,24 @@ button:hover {
   box-shadow: 0 0 25px rgba(171, 71, 188, 0.8);
   transform: translateY(-2px);
 }
+#detail-btn {
+  background: linear-gradient(45deg, #6a1b9a, #ab47bc);
+  color: #fff;
+  border: 2px solid #ce93d8;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(171, 71, 188, 0.6);
+  transition: 0.3s;
+}
+
+#detail-btn:hover {
+  background: linear-gradient(45deg, #ab47bc, #ce93d8);
+  box-shadow: 0 0 25px rgba(171, 71, 188, 0.8);
+  transform: translateY(-2px);
+}
 .share-btn {
   display: inline-flex;
   align-items: center;
@@ -209,8 +227,9 @@ button:hover {
 
   <!-- 16タイプ説明ボタン（最初は非表示） -->
   <button id="types-btn" onclick="location.href='explanation.html'" style="display:none; margin-top:15px;">
-    16タイプの説明
+    16タイプの説明を見る
   </button>
+  <button id="detail-btn">タイプの詳細説明を見る</button>
 </div>
 
 
@@ -242,7 +261,7 @@ const questions = [
   { text: "快楽を優先して行動しますか？", direction:"F", axis:"FE", options: ["絶対に優先しない","優先しない","あまり優先しない","少し優先する","優先する","絶対に優先する"] },
   { text: "心のつながりを感じることで興奮しますか？", direction:"E", axis:"FE", options: ["全く興奮しない","興奮しない","あまり興奮しない","少し興奮する","興奮する","めっちゃ興奮する"] },
   { text: "性的欲望は隠さずオープンに表現しますか？", direction:"O", axis:"OC", options: ["絶対に隠す","隠す","できるだけ隠す","少しは表現する","表現する","めっちゃ表現する"] },
-  { text: "関係が浅くても性の本性を見せられますか？", direction:"O", axis:"OC", options: ["絶対に見せたくない","見せたくない","できるだけ見せたくない","少しは見せたい","見せたい","めっちゃ見せたい"] },
+  { text: "関係が浅くても性の本性を見せたいですか？", direction:"O", axis:"OC", options: ["絶対に見せたくない","見せたくない","できるだけ見せたくない","少しは見せたい","見せたい","めっちゃ見せたい"] },
   { text: "新しいプレイやシチュエーションに挑戦するのが好きですか？", direction:"A", axis:"AN", options: ["絶対に挑戦したくない","挑戦したくない","できるだけ挑戦したくない","少しは挑戦したい","挑戦したい","めっちゃ挑戦したい"] },
   { text: "安定したルーティン的なプレイが心地よいですか？", direction:"N", axis:"AN", options: ["全く物足りない","物足りない","少し物足りない","少しは心地よい","心地よい","めっちゃ心地よい"] },
   { text: "プレイ中、相手と自分どちらの快楽を重視しますか？", direction:"E", axis:"FE", options: ["完全に自分","自分","どちらかというと自分","どちらかというと相手","相手","完全に相手"] },
@@ -358,6 +377,9 @@ function showResult() {
 
   // 結果画面になったら16タイプ説明ボタンを表示
 document.getElementById("types-btn").style.display = "inline-block";
+  document.getElementById("detail-btn").onclick = function() {
+    location.href = `detail_${code}.html`;
+  };
 
   // SNSシェアボタンを表示
   const shareButtons = document.getElementById("share-buttons");
@@ -368,7 +390,7 @@ document.getElementById("types-btn").style.display = "inline-block";
 }
 function setShareLinks(resultName) {
   const url = encodeURIComponent(location.href);
-  const text = encodeURIComponent(`診断したら私は『${resultName}』タイプでした！ #大人診断`);
+  const text = encodeURIComponent(`診断したら私は『${resultName}』タイプでした！ #夜の大人診断`);
 
   document.getElementById("share-twitter-btn").href =
     `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
