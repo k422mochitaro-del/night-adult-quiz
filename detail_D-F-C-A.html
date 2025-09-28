@@ -99,21 +99,19 @@ button:hover {
   background: linear-gradient(45deg,#b71c1c,#f44336);
 }
 @media(max-width:600px){
-  .type-detail-container {
-    flex-direction: column;   /* 縦並びにする */
+  .container {
+    flex-direction: column;  /* 縦並び */
     align-items: center;
   }
-  .type-image {
-    margin-left: 0;          /* 左余白を消す */
-    text-align: center;
+  .left {
+    margin-bottom: 20px;  /* 画像と説明文の間に余白 */
   }
-  .type-text {
+  .right {
     width: 100%;
-    max-width: 100%;
-    margin-top: 20px;        /* 画像との間に余白 */
-    text-align: left;        /* スマホでも左寄せ（中央にしたいなら center に変更） */
+    text-align: left;     /* スマホでも読みやすく左寄せ */
   }
 }
+
 
 </style>
 </head>
